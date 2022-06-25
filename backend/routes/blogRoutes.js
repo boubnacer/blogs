@@ -8,7 +8,9 @@ const {
   deleteBlog,
 } = require("../controllers/blogController.js");
 
-router.route("/").get(getBlogs).post(setBlog);
-router.route("/:id").put(updateBlog).delete(deleteBlog);
+const { protect } = require("../middleware/authMiddleware");
+
+router.route("/").get(protect, getBlogs).post(protect, setBlog);
+router.route("/:id").put(protect, updateBlog).delete(protect, deleteBlog);
 
 module.exports = router;
