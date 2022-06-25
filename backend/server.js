@@ -1,8 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
+const colors = require("colors");
+const connectDb = require("./config/db.js");
 const { errorHandler } = require("./middleware/errorMiddleware.js");
-
 const blogRoutes = require("./routes/blogRoutes.js");
+
+// connectDb();
 
 const app = express();
 
@@ -15,4 +18,16 @@ app.use("/api/v1/blogs", blogRoutes);
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`app is listening on port:${port}`));
+
+const start = async () => {
+  try {
+    await connectDb();
+    await app.listen(port, () =>
+      console.log(`app is listening on port:${port}`)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
